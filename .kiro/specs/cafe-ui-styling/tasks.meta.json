@@ -1,0 +1,117 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1. Setup test framework dan buat file globals.css dengan design tokens": [
+      {
+        "executionId": "7a236518-cac6-4dee-bcbb-606dc426cf9f",
+        "chatSessionId": "sess_957d4e9b-ec24-4090-89ba-60023a58df10",
+        "timestamp": 1783824714137
+      },
+      {
+        "executionId": "7a236518-cac6-4dee-bcbb-606dc426cf9f",
+        "chatSessionId": "sess_957d4e9b-ec24-4090-89ba-60023a58df10",
+        "timestamp": 1783824839861
+      }
+    ],
+    "2.1 Rewrite `Button.module.css` untuk menggunakan design tokens": [
+      {
+        "executionId": "df64c248-b030-45bf-b60b-399586d7370f",
+        "chatSessionId": "sess_5a040bcf-e1be-48f5-bfb0-3df8165906cf",
+        "timestamp": 1783825220858
+      },
+      {
+        "executionId": "df64c248-b030-45bf-b60b-399586d7370f",
+        "chatSessionId": "sess_5a040bcf-e1be-48f5-bfb0-3df8165906cf",
+        "timestamp": 1783825272276
+      }
+    ],
+    "2. Update Button component styling": [
+      {
+        "executionId": "df64c248-b030-45bf-b60b-399586d7370f",
+        "chatSessionId": "sess_5a040bcf-e1be-48f5-bfb0-3df8165906cf",
+        "timestamp": 1783825272956
+      }
+    ],
+    "3.1 Rewrite `Input.module.css` untuk menggunakan design tokens": [
+      {
+        "executionId": "0d6b98e5-880b-433e-880f-698411e3eaa3",
+        "chatSessionId": "sess_74722338-f6d8-4bcc-a671-3cb87bc5593c",
+        "timestamp": 1783825376138
+      },
+      {
+        "executionId": "0d6b98e5-880b-433e-880f-698411e3eaa3",
+        "chatSessionId": "sess_74722338-f6d8-4bcc-a671-3cb87bc5593c",
+        "timestamp": 1783825441717
+      }
+    ],
+    "3. Update Input component styling": [
+      {
+        "executionId": "0d6b98e5-880b-433e-880f-698411e3eaa3",
+        "chatSessionId": "sess_74722338-f6d8-4bcc-a671-3cb87bc5593c",
+        "timestamp": 1783825442287
+      }
+    ],
+    "4.1 Rewrite `Select.module.css` untuk konsistensi dengan Input dan tambah ikon kustom": [
+      {
+        "executionId": "14ce1a34-32c6-42cb-88ee-13b44ecc4181",
+        "chatSessionId": "sess_00e0057d-16ec-4d7b-8f49-f1f853a14c40",
+        "timestamp": 1783825745801
+      },
+      {
+        "executionId": "14ce1a34-32c6-42cb-88ee-13b44ecc4181",
+        "chatSessionId": "sess_00e0057d-16ec-4d7b-8f49-f1f853a14c40",
+        "timestamp": 1783825808175
+      }
+    ],
+    "4. Update Select component styling": [
+      {
+        "executionId": "14ce1a34-32c6-42cb-88ee-13b44ecc4181",
+        "chatSessionId": "sess_00e0057d-16ec-4d7b-8f49-f1f853a14c40",
+        "timestamp": 1783825808431
+      }
+    ],
+    "5. Checkpoint — pastikan semua tests UI primitif lulus": [
+      {
+        "executionId": "0da05c3a-e0b3-479c-a7be-efba4d35f1c3",
+        "chatSessionId": "sess_a616813d-ba5f-4011-9d1b-184b32370c66",
+        "timestamp": 1783825884806
+      },
+      {
+        "executionId": "0da05c3a-e0b3-479c-a7be-efba4d35f1c3",
+        "chatSessionId": "sess_a616813d-ba5f-4011-9d1b-184b32370c66",
+        "timestamp": 1783825994901
+      }
+    ],
+    "6.1 Update `Home.module.css` dengan design tokens dan responsive layout": [
+      {
+        "executionId": "cf64ff4c-68ae-4c2c-b4af-c659e059cd28",
+        "chatSessionId": "sess_02f87147-12b4-430b-bc03-c60a98ec3d8c",
+        "timestamp": 1783826023978
+      },
+      {
+        "executionId": "cf64ff4c-68ae-4c2c-b4af-c659e059cd28",
+        "chatSessionId": "sess_02f87147-12b4-430b-bc03-c60a98ec3d8c",
+        "timestamp": 1783826083895
+      }
+    ],
+    "6.2 Modifikasi `Home.tsx` untuk menambah elemen deskripsi": [
+      {
+        "executionId": "1253dd6c-46af-4f73-adf5-65ba38068f17",
+        "chatSessionId": "sess_afb4b6e2-795c-45b5-a613-e9fbf3fee41d",
+        "timestamp": 1783826159443
+      },
+      {
+        "executionId": "1253dd6c-46af-4f73-adf5-65ba38068f17",
+        "chatSessionId": "sess_afb4b6e2-795c-45b5-a613-e9fbf3fee41d",
+        "timestamp": 1783826257771
+      }
+    ],
+    "6. Update Home page": [
+      {
+        "executionId": "1253dd6c-46af-4f73-adf5-65ba38068f17",
+        "chatSessionId": "sess_afb4b6e2-795c-45b5-a613-e9fbf3fee41d",
+        "timestamp": 1783826258312
+      }
+    ]
+  }
+}

@@ -1,7 +1,7 @@
 const filters = [
   "All",
   "Coffee",
-  "Non Coffee",
+  "Non-Coffee",
   "Pastries",
   "Desserts",
   "Sandwiches",

@@ -3,28 +3,44 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  padding: 20px;
+  padding: var(--spacing-md);
 }
 
 .card {
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
-  padding: 32px;
-  width: 30%;
-  border-radius: 20px;
+  box-shadow: var(--glass-shadow);
+  background-color: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  padding: var(--spacing-xl);
+  width: 100%;
+  max-width: 420px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
 
-  @media screen and (max-width: 768px) {
-    width: 100%;
-  }
+.header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
 }
 
 .title {
-  font-size: 32px;
-  margin-bottom: 16px;
-  text-align: center;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
+.subtitle {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: var(--spacing-md);
 }

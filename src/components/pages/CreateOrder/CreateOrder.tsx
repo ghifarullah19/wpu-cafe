@@ -105,13 +105,15 @@ const CreateOrder = () => {
               />
               <h2>{item.name}</h2>
               <div className={styles.bottom}>
-                <p className={styles.price}>${item.price}</p>
+                <p className={styles.price}>Rp {item.price.toLocaleString("id-ID")}</p>
                 <Button
+                  type="button"
                   onClick={() =>
                     handleAddToCart("increment", `${item.id}`, `${item.name}`)
                   }
+                  color="secondary"
                 >
-                  Add to Cart
+                  Add
                 </Button>
               </div>
             </div>
@@ -121,9 +123,9 @@ const CreateOrder = () => {
       <form className={styles.form} onSubmit={handleOrder}>
         <div>
           <div className={styles.header}>
-            <h2 className={styles.title}>Customer Information</h2>
+            <h2 className={styles.title}>Customer Info</h2>
             <Link to="/orders">
-              <Button color="secondary">Cancel</Button>
+              <Button type="button" color="secondary">Back</Button>
             </Link>
           </div>
           <div className={styles.input}>
@@ -148,47 +150,51 @@ const CreateOrder = () => {
           <div className={styles.header}>
             <h2 className={styles.title}>Current Order</h2>
           </div>
-          {carts.length > 0 ? (
-            <div className={styles.item}>
-              {carts.map((item: ICart) => (
-                <div className={styles.item} key={item.menuId}>
-                  <h4 className={styles.item}>{item.name}</h4>
-                  <div className={styles.quantity}>
-                    <Button
-                      onClick={() =>
-                        handleAddToCart(
-                          "decrement",
-                          `${item.menuId}`,
-                          `${item.name}`,
-                        )
-                      }
-                      color="secondary"
-                    >
-                      -
-                    </Button>
-                    <div className={styles.quantityValue}>{item.quantity}</div>
-                    <Button
-                      onClick={() =>
-                        handleAddToCart(
-                          "increment",
-                          `${item.menuId}`,
-                          `${item.name}`,
-                        )
-                      }
-                      color="secondary"
-                    >
-                      +
-                    </Button>
+          <div className={styles.cart}>
+            {carts.length > 0 ? (
+              <>
+                {carts.map((item: ICart) => (
+                  <div className={styles.item} key={item.menuId}>
+                    <h4>{item.name}</h4>
+                    <div className={styles.quantity}>
+                      <Button
+                        type="button"
+                        onClick={() =>
+                          handleAddToCart(
+                            "decrement",
+                            `${item.menuId}`,
+                            `${item.name}`,
+                          )
+                        }
+                        color="secondary"
+                      >
+                        -
+                      </Button>
+                      <div className={styles.quantityValue}>{item.quantity}</div>
+                      <Button
+                        type="button"
+                        onClick={() =>
+                          handleAddToCart(
+                            "increment",
+                            `${item.menuId}`,
+                            `${item.name}`,
+                          )
+                        }
+                        color="secondary"
+                      >
+                        +
+                      </Button>
+                    </div>
                   </div>
+                ))}
+                <div className={styles.submitWrapper}>
+                  <Button type="submit">Place Order</Button>
                 </div>
-              ))}
-              <Button type="submit">Order</Button>
-            </div>
-          ) : (
-            <div className={styles.cart}>
-              <h4>Your cart is empty</h4>
-            </div>
-          )}
+              </>
+            ) : (
+              <p className={styles["empty-cart"]}>Your cart is empty</p>
+            )}
+          </div>
         </div>
       </form>
     </main>

@@ -1,10 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap');
+
+:root {
+  /* === Bakery Color Palette === */
+  --color-primary: #8B5A2B;
+  --color-crust-brown: #8B5A2B;
+  --color-butter-yellow: #F6E0B5;
+  --color-cream: #FAF6F0;
+  --color-text-primary: #3E2723;
+  --color-text-secondary: #5D4037;
+  --color-bg-default: #FAF6F0;
+  --color-bg-gradient-start: #FAF6F0;
+  --color-bg-gradient-end: #F5EAE0;
+  --color-surface: rgba(255, 255, 255, 0.6);
+  --color-border: rgba(139, 90, 43, 0.2);
+
+  /* === Status Colors === */
+  --color-status-processing: #f59e0b;
+  --color-status-completed: #A3B18A;
+
+  /* === Glassmorphism Utility Tokens === */
+  --glass-bg: rgba(255, 255, 255, 0.55);
+  --glass-bg-hover: rgba(255, 255, 255, 0.7);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.6);
+  --glass-shadow: 0 8px 32px 0 rgba(139, 90, 43, 0.08);
+  --glass-blur: blur(16px);
+
+  /* === Typography === */
+  --font-size-base: 16px;
+  --font-size-lg: 20px;
+  --font-size-xl: 32px;
+  --font-weight-bold: 700;
+
+  /* === Spacing === */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  /* === Border Radius === */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+
+  /* === Shadow === */
+  --shadow-card: var(--glass-shadow);
+  --shadow-focus: 0 0 0 3px rgba(139, 90, 43, 0.2);
+  --shadow-hover: 0 8px 32px 0 rgba(139, 90, 43, 0.15);
+}
+
+[data-theme="dark"] {
+  /* === Bakery Color Palette === */
+  --color-primary: #E0A96D;
+  --color-crust-brown: #C08A4D;
+  --color-butter-yellow: #B89F6B;
+  --color-cream: #2C1E16;
+  --color-text-primary: #F5EAE0;
+  --color-text-secondary: #D7CCC8;
+  --color-bg-default: #2C1E16;
+  --color-bg-gradient-start: #2C1E16;
+  --color-bg-gradient-end: #1E140E;
+  --color-surface: rgba(44, 30, 22, 0.8);
+  --color-border: rgba(246, 224, 181, 0.15);
+
+  /* === Status Colors === */
+  --color-status-processing: #FBBF24;
+  --color-status-completed: #A3B18A;
+
+  /* === Glassmorphism Utility Tokens === */
+  --glass-bg: rgba(20, 15, 10, 0.65);
+  --glass-bg-hover: rgba(20, 15, 10, 0.8);
+  --glass-border: 1px solid rgba(246, 224, 181, 0.1);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+
+  /* === Shadow === */
+  --shadow-focus: 0 0 0 3px rgba(224, 169, 109, 0.3);
+  --shadow-hover: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
 }
 
 body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Outfit", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, var(--color-bg-gradient-start) 0%, var(--color-bg-gradient-end) 100%);
+  color: var(--color-text-primary);
+  min-height: 100vh;
 }
 
 a {

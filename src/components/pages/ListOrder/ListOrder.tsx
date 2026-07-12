@@ -34,59 +34,60 @@ const ListOrder = () => {
     return navigate("/login");
   };
 
+  const getStatusBadgeClass = (status: string) => {
+    if (status === "PROCESSING") return styles["badge-processing"];
+    if (status === "COMPLETED") return styles["badge-completed"];
+    return null;
+  };
+
   return (
     <main className={styles.order}>
-      <section className={styles.header}>
-        <h1 className={styles.title}>List Order</h1>
-        <div className={styles.button}>
-          <Link to="/create">
-            <Button>Create Order</Button>
-          </Link>
-          <Button color="secondary" onClick={handleLogout}>
-            Logout
-          </Button>
-        </div>
-      </section>
-      <section>
-        <table
-          border={1}
-          className={styles.table}
-          cellSpacing={0}
-          cellPadding={10}
-        >
-          <thead>
-            <tr>
-              <th>No</th>
-              <th>Customer Name</th>
-              <th>Table Number</th>
-              <th>Total</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((order: IOrder, index: number) => (
-              <tr key={order.id}>
-                <td>{index + 1}</td>
-                <td>{order.customer_name}</td>
-                <td>{order.table_number}</td>
-                <td>{order.total}</td>
-                <td>{order.status}</td>
-                <td className={styles.action}>
-                  <Link to={`/orders/${order.id}`}>
-                    <Button color="primary">Detail</Button>
-                  </Link>
-                  {order.status === "PROCESSING" && (
-                    <Button onClick={() => handleCompletedOrder(order.id)}>
-                      Completed
-                    </Button>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
+      <div className={styles.container}>
+        <section className={styles.header}>
+          <h1 className={styles.title}>List Order</h1>
+          <div className={styles.button}>
+            <Link to="/create">
+              <Button>+ New Order</Button>
+            </Link>
+            <Button color="secondary" onClick={handleLogout}>
+              Logout
+            </Button>
+          </div>
+        </section>
+        <section className={styles.list}>
+          {orders.map((order: IOrder) => (
+            <div key={order.id} className={styles.card}>
+              <div className={styles.cardHeader}>
+                <h2>{order.customer_name}</h2>
+                {getStatusBadgeClass(order.status) !== null ? (
+                  <span className={`${styles.badge} ${getStatusBadgeClass(order.status)}`}>
+                    {order.status}
+                  </span>
+                ) : (
+                  <span className={styles.badge}>{order.status}</span>
+                )}
+              </div>
+              <div className={styles.cardBody}>
+                <p><strong>Table:</strong> {order.table_number}</p>
+                <p><strong>Total:</strong> Rp {order.total.toLocaleString("id-ID")}</p>
+              </div>
+              <div className={styles.action}>
+                <Link to={`/orders/${order.id}`}>
+                  <Button color="secondary">Detail</Button>
+                </Link>
+                {order.status === "PROCESSING" && (
+                  <Button onClick={() => handleCompletedOrder(order.id)}>
+                    Completed
+                  </Button>
+                )}
+              </div>
+            </div>
+          ))}
+          {orders.length === 0 && (
+            <p className={styles.empty}>No orders found.</p>
+          )}
+        </section>
+      </div>
     </main>
   );
 };

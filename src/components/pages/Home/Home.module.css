@@ -1,8 +1,59 @@
 .home {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  gap: 8px;
+  min-height: 100vh;
+  padding: var(--spacing-md);
+}
+
+.glassPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background-color: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--radius-lg);
+  padding: 4rem 3rem;
+  max-width: 600px;
+  gap: var(--spacing-md);
+  transition: transform 300ms ease, box-shadow 300ms ease;
+}
+
+.glassPanel:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-hover);
+}
+
+.glassPanel h1 {
+  font-size: 2.8rem;
+  color: var(--color-primary);
+  margin: 0;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.description {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  margin: 0;
+  margin-bottom: var(--spacing-sm);
+  line-height: 1.6;
+}
+
+.action {
+  text-decoration: none;
+}
+
+@media screen and (max-width: 600px) {
+  .glassPanel {
+    padding: 2.5rem var(--spacing-lg);
+  }
+  
+  .glassPanel h1 {
+    font-size: 2rem;
+  }
 }

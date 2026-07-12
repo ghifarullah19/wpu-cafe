@@ -24,7 +24,10 @@ const Login = () => {
   return (
     <main className={styles.login}>
       <div className={styles.card}>
-        <h1 className={styles.title}>Login</h1>
+        <div className={styles.header}>
+          <h1 className={styles.title}>WPU Cafe POS</h1>
+          <p className={styles.subtitle}>Welcome back! Please enter your details.</p>
+        </div>
         <form action="" className={styles.form} onSubmit={handleLogin}>
           <Input
             label="Email"
@@ -42,7 +45,7 @@ const Login = () => {
             placeholder="Enter your password"
             required
           />
-          <Button type="submit">Login</Button>
+          <Button type="submit">Sign In</Button>
         </form>
       </div>
     </main>
