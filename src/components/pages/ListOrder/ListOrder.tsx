@@ -3,18 +3,28 @@ import { getOrders, updateOrder } from "../../../services/orders.service";
 import styles from "./ListOrder.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../../ui/Button";
+import LoadingSpinner from "../../ui/LoadingSpinner";
 import type { IOrder } from "../../../types/order";
 import { removeLocalStorage } from "../../../utils/storage";
 
 const ListOrder = () => {
   const [orders, setOrders] = useState([]);
   const [refetchOrder, setRefetchOrder] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
 
   useEffect(() => {
     if (refetchOrder) {
       const fetchOrder = async () => {
-        const result = await getOrders();
-        setOrders(result.data);
+        try {
+          setIsLoading(true);
+          const result = await getOrders();
+          setOrders(result.data);
+        } catch (error) {
+          console.error("Error fetching orders:", error);
+        } finally {
+          setIsLoading(false);
+        }
       };
       fetchOrder();
       setRefetchOrder(false);
@@ -22,9 +32,15 @@ const ListOrder = () => {
   }, [refetchOrder]);
 
   const handleCompletedOrder = async (id: string) => {
-    await updateOrder(id, { status: "COMPLETED" }).then(() => {
+    try {
+      setUpdatingId(id);
+      await updateOrder(id, { status: "COMPLETED" });
       setRefetchOrder(true);
-    });
+    } catch (error) {
+      console.error("Error updating order:", error);
+    } finally {
+      setUpdatingId(null);
+    }
   };
 
   const navigate = useNavigate();
@@ -55,7 +71,11 @@ const ListOrder = () => {
           </div>
         </section>
         <section className={styles.list}>
-          {orders.map((order: IOrder) => (
+          {isLoading ? (
+            <LoadingSpinner centered />
+          ) : (
+            <>
+              {orders.map((order: IOrder) => (
             <div key={order.id} className={styles.card}>
               <div className={styles.cardHeader}>
                 <h2>{order.customer_name}</h2>
@@ -76,7 +96,7 @@ const ListOrder = () => {
                   <Button color="secondary">Detail</Button>
                 </Link>
                 {order.status === "PROCESSING" && (
-                  <Button onClick={() => handleCompletedOrder(order.id)}>
+                  <Button isLoading={updatingId === order.id} onClick={() => handleCompletedOrder(order.id)}>
                     Completed
                   </Button>
                 )}
@@ -86,6 +106,8 @@ const ListOrder = () => {
           {orders.length === 0 && (
             <p className={styles.empty}>No orders found.</p>
           )}
+          </>
+        )}
         </section>
       </div>
     </main>

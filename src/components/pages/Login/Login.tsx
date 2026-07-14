@@ -1,13 +1,15 @@
 import styles from "./Login.module.css";
 import Input from "../../ui/Input";
 import Button from "../../ui/Button";
-import type { FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { login } from "../../../services/auth.service";
 import { setLocalStorage } from "../../../utils/storage";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleLogin = async (event: FormEvent) => {
     event.preventDefault();
     const form = event.target as HTMLFormElement;
@@ -15,10 +17,18 @@ const Login = () => {
       email: form.email.value,
       password: form.password.value,
     };
-    const result = await login(payload);
-    setLocalStorage("auth", result.token);
 
-    return navigate("/orders");
+    try {
+      setIsLoading(true);
+      const result = await login(payload);
+      setLocalStorage("auth", result.token);
+
+      return navigate("/orders");
+    } catch (error) {
+      console.error("Login error:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -45,7 +55,7 @@ const Login = () => {
             placeholder="Enter your password"
             required
           />
-          <Button type="submit">Sign In</Button>
+          <Button type="submit" isLoading={isLoading}>Sign In</Button>
         </form>
       </div>
     </main>

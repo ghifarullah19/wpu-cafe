@@ -1,22 +1,32 @@
 import styles from "./Button.module.css";
+import React from "react";
 
-interface PropTypes {
+interface PropTypes extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   type?: "button" | "submit" | "reset";
-  children: string;
+  children: React.ReactNode;
   onClick?: () => void;
   className?: string;
   color?: "primary" | "secondary";
+  isLoading?: boolean;
 }
 
-const Button = (props: PropTypes) => {
-  const { type = "button", children, color = "primary", className } = props;
+const Button = ({
+  type = "button",
+  children,
+  color = "primary",
+  className,
+  isLoading,
+  disabled,
+  ...props
+}: PropTypes) => {
   return (
     <button
       type={type}
-      className={`${styles.button} ${styles[`button-${color}`]} ${className}`}
+      className={`${styles.button} ${styles[`button-${color}`]} ${className || ""} ${isLoading ? styles.loading : ""}`.trim()}
+      disabled={isLoading || disabled}
       {...props}
     >
-      {children}
+      {isLoading ? "Loading..." : children}
     </button>
   );
 };

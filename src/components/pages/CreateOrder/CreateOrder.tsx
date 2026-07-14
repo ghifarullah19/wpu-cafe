@@ -7,17 +7,27 @@ import { filters, tables } from "./CreateOrder.constants";
 import Button from "../../ui/Button";
 import Input from "../../ui/Input";
 import Select from "../../ui/Select/Select";
+import LoadingSpinner from "../../ui/LoadingSpinner";
 import { createOrder } from "../../../services/orders.service";
 
 const CreateOrder = () => {
   const [menus, setMenus] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [carts, setCarts] = useState<ICart[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isFetchingMenu, setIsFetchingMenu] = useState(true);
 
   useEffect(() => {
     const fetchOrder = async () => {
-      const result = await getMenus(searchParams.get("category") as string);
-      setMenus(result.data);
+      try {
+        setIsFetchingMenu(true);
+        const result = await getMenus(searchParams.get("category") as string);
+        setMenus(result.data);
+      } catch (error) {
+        console.error("Error fetching menus:", error);
+      } finally {
+        setIsFetchingMenu(false);
+      }
     };
     fetchOrder();
   }, [searchParams.get("category")]);
@@ -67,9 +77,15 @@ const CreateOrder = () => {
       })),
     };
 
-    await createOrder(payload);
-
-    return navigate("/orders");
+    try {
+      setIsSubmitting(true);
+      await createOrder(payload);
+      return navigate("/orders");
+    } catch (error) {
+      console.error("Error creating order:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -96,28 +112,32 @@ const CreateOrder = () => {
           ))}
         </div>
         <div className={styles.list}>
-          {menus.map((item: IMenu) => (
-            <div className={styles.item} key={item.id}>
-              <img
-                src={item.image_url}
-                alt={item.name}
-                className={styles.image}
-              />
-              <h2>{item.name}</h2>
-              <div className={styles.bottom}>
-                <p className={styles.price}>Rp {item.price.toLocaleString("id-ID")}</p>
-                <Button
-                  type="button"
-                  onClick={() =>
-                    handleAddToCart("increment", `${item.id}`, `${item.name}`)
-                  }
-                  color="secondary"
-                >
-                  Add
-                </Button>
+          {isFetchingMenu ? (
+            <LoadingSpinner centered />
+          ) : (
+            menus.map((item: IMenu) => (
+              <div className={styles.item} key={item.id}>
+                <img
+                  src={item.image_url}
+                  alt={item.name}
+                  className={styles.image}
+                />
+                <h2>{item.name}</h2>
+                <div className={styles.bottom}>
+                  <p className={styles.price}>Rp {item.price.toLocaleString("id-ID")}</p>
+                  <Button
+                    type="button"
+                    onClick={() =>
+                      handleAddToCart("increment", `${item.id}`, `${item.name}`)
+                    }
+                    color="secondary"
+                  >
+                    Add
+                  </Button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
       <form className={styles.form} onSubmit={handleOrder}>
@@ -188,7 +208,7 @@ const CreateOrder = () => {
                   </div>
                 ))}
                 <div className={styles.submitWrapper}>
-                  <Button type="submit">Place Order</Button>
+                  <Button type="submit" isLoading={isSubmitting}>Place Order</Button>
                 </div>
               </>
             ) : (

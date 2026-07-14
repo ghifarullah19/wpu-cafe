@@ -41,3 +41,10 @@ User Story:
 Acceptance Criteria:
 1. WHEN submitting a new order in `CreateOrder`, THE submit button SHALL be disabled and indicate a loading state.
 2. WHEN clicking "Completed" on an order in `ListOrder` or `DetailOrder`, THE button SHALL be disabled until the backend updates successfully.
+
+### Requirement 5: Menu Fetching Loading State
+User Story:
+"As a staff member, I want to see a loading indicator when I filter menus or open the create order page so that I know the menu is being updated and fetched."
+
+Acceptance Criteria:
+1. WHEN the `CreateOrder` page is fetching menu data initially or applying a category filter, THE page SHALL display the `LoadingSpinner` in the menu list section instead of empty or stale content.

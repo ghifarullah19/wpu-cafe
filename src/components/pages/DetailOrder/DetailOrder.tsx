@@ -4,21 +4,27 @@ import type { IOrder, ICart } from "../../../types/order";
 import { getOrderById, updateOrder } from "../../../services/orders.service";
 import styles from "./DetailOrder.module.css";
 import Button from "../../ui/Button";
+import LoadingSpinner from "../../ui/LoadingSpinner";
 
 const DetailOrder = () => {
   const { id } = useParams();
   const [order, setOrder] = useState<IOrder | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [refetchOrder, setRefetchOrder] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
     if (refetchOrder) {
       const fetchOrder = async () => {
         try {
+          setIsLoading(true);
           const result = await getOrderById(`${id}`);
           setOrder(result);
         } catch {
           setError("Gagal memuat data pesanan");
+        } finally {
+          setIsLoading(false);
         }
       };
       fetchOrder();
@@ -28,9 +34,15 @@ const DetailOrder = () => {
 
   const handleCompletedOrder = async () => {
     if (!id) return;
-    await updateOrder(id, { status: "COMPLETED" }).then(() => {
+    try {
+      setIsUpdating(true);
+      await updateOrder(id, { status: "COMPLETED" });
       setRefetchOrder(true);
-    });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsUpdating(false);
+    }
   };
 
   const getStatusBadgeClass = (status: string) => {
@@ -51,8 +63,11 @@ const DetailOrder = () => {
           </Link>
         </section>
         
-        <section className={styles.order}>
-          <div className={styles.info}>
+        {isLoading ? (
+          <LoadingSpinner centered />
+        ) : (
+          <section className={styles.order}>
+            <div className={styles.info}>
             <div className={styles.item}>
               <p>Order ID:</p>
               <h4>{order?.id}</h4>
@@ -83,7 +98,7 @@ const DetailOrder = () => {
             </div>
             {order?.status === "PROCESSING" && (
               <div className={styles.completeAction}>
-                <Button onClick={handleCompletedOrder}>
+                <Button isLoading={isUpdating} onClick={handleCompletedOrder}>
                   Selesaikan Pesanan
                 </Button>
               </div>
@@ -113,6 +128,7 @@ const DetailOrder = () => {
             </div>
           </div>
         </section>
+        )}
       </div>
     </main>
   );
