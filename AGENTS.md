@@ -60,6 +60,9 @@ When user says:
 "lanjutkan task"
 → Use Existing Task Workflow.
 
+"lanjutkan task"
+→ Use Existing Task Workflow.
+
 "buat fitur"
 → Use Feature Development Workflow.
 

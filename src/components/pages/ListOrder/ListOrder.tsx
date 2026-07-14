@@ -1,41 +1,26 @@
-import { useEffect, useState } from "react";
-import { getOrders, updateOrder } from "../../../services/orders.service";
+import { useState } from "react";
+import useSWR from "swr";
+import { updateOrder } from "../../../services/orders.service";
 import styles from "./ListOrder.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../../ui/Button";
-import LoadingSpinner from "../../ui/LoadingSpinner";
+import Skeleton from "../../ui/Skeleton";
 import type { IOrder } from "../../../types/order";
 import { removeLocalStorage } from "../../../utils/storage";
+import { fetcher } from "../../../utils/fetch";
+import { environment } from "../../../constants/environment";
 
 const ListOrder = () => {
-  const [orders, setOrders] = useState([]);
-  const [refetchOrder, setRefetchOrder] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (refetchOrder) {
-      const fetchOrder = async () => {
-        try {
-          setIsLoading(true);
-          const result = await getOrders();
-          setOrders(result.data);
-        } catch (error) {
-          console.error("Error fetching orders:", error);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-      fetchOrder();
-      setRefetchOrder(false);
-    }
-  }, [refetchOrder]);
+  const { data, isLoading, mutate } = useSWR(`${environment.API_URL}/orders?page=1&pageSize=10`, fetcher);
+  const orders = data?.data || [];
 
   const handleCompletedOrder = async (id: string) => {
     try {
       setUpdatingId(id);
       await updateOrder(id, { status: "COMPLETED" });
-      setRefetchOrder(true);
+      mutate();
     } catch (error) {
       console.error("Error updating order:", error);
     } finally {
@@ -72,7 +57,7 @@ const ListOrder = () => {
         </section>
         <section className={styles.list}>
           {isLoading ? (
-            <LoadingSpinner centered />
+            <Skeleton type="orderCard" count={3} />
           ) : (
             <>
               {orders.map((order: IOrder) => (

@@ -1,43 +1,26 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import useSWR from "swr";
 import type { IOrder, ICart } from "../../../types/order";
-import { getOrderById, updateOrder } from "../../../services/orders.service";
+import { updateOrder } from "../../../services/orders.service";
 import styles from "./DetailOrder.module.css";
 import Button from "../../ui/Button";
-import LoadingSpinner from "../../ui/LoadingSpinner";
+import Skeleton from "../../ui/Skeleton";
+import { fetcher } from "../../../utils/fetch";
+import { environment } from "../../../constants/environment";
 
 const DetailOrder = () => {
   const { id } = useParams();
-  const [order, setOrder] = useState<IOrder | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [refetchOrder, setRefetchOrder] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
-  useEffect(() => {
-    if (refetchOrder) {
-      const fetchOrder = async () => {
-        try {
-          setIsLoading(true);
-          const result = await getOrderById(`${id}`);
-          setOrder(result);
-        } catch {
-          setError("Gagal memuat data pesanan");
-        } finally {
-          setIsLoading(false);
-        }
-      };
-      fetchOrder();
-      setRefetchOrder(false);
-    }
-  }, [id, refetchOrder]);
+  const { data: order, error, isLoading, mutate } = useSWR(id ? `${environment.API_URL}/orders/${id}` : null, fetcher);
 
   const handleCompletedOrder = async () => {
     if (!id) return;
     try {
       setIsUpdating(true);
       await updateOrder(id, { status: "COMPLETED" });
-      setRefetchOrder(true);
+      mutate();
     } catch (error) {
       console.error(error);
     } finally {
@@ -51,7 +34,7 @@ const DetailOrder = () => {
     return null;
   };
 
-  if (error) return <p className={styles.error}>{error}</p>;
+  if (error) return <p className={styles.error}>Gagal memuat data pesanan</p>;
 
   return (
     <main className={styles.detail}>
@@ -64,7 +47,9 @@ const DetailOrder = () => {
         </section>
         
         {isLoading ? (
-          <LoadingSpinner centered />
+          <div style={{ display: "flex", gap: "16px", flexDirection: "column", width: "100%", marginTop: "24px" }}>
+            <Skeleton type="orderCard" count={2} />
+          </div>
         ) : (
           <section className={styles.order}>
             <div className={styles.info}>
@@ -114,6 +99,7 @@ const DetailOrder = () => {
                     className={styles.image}
                     src={item?.menuItem?.image_url}
                     alt={item?.menuItem?.name}
+                    loading="lazy"
                   />
                   <div className={styles.itemDetails}>
                     <p className={styles.name}>

@@ -1,36 +1,29 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import useSWR from "swr";
 import type { ICart, IMenu } from "../../../types/order";
-import { getMenus } from "../../../services/menu.service";
 import styles from "./CreateOrder.module.css";
 import { filters, tables } from "./CreateOrder.constants";
 import Button from "../../ui/Button";
 import Input from "../../ui/Input";
 import Select from "../../ui/Select/Select";
-import LoadingSpinner from "../../ui/LoadingSpinner";
+import Skeleton from "../../ui/Skeleton";
 import { createOrder } from "../../../services/orders.service";
+import { fetcher } from "../../../utils/fetch";
+import { environment } from "../../../constants/environment";
 
 const CreateOrder = () => {
-  const [menus, setMenus] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [carts, setCarts] = useState<ICart[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isFetchingMenu, setIsFetchingMenu] = useState(true);
 
-  useEffect(() => {
-    const fetchOrder = async () => {
-      try {
-        setIsFetchingMenu(true);
-        const result = await getMenus(searchParams.get("category") as string);
-        setMenus(result.data);
-      } catch (error) {
-        console.error("Error fetching menus:", error);
-      } finally {
-        setIsFetchingMenu(false);
-      }
-    };
-    fetchOrder();
-  }, [searchParams.get("category")]);
+  const category = searchParams.get("category");
+  const url = category 
+    ? `${environment.API_URL}/menu?page=1&pageSize=25&category=${category}` 
+    : `${environment.API_URL}/menu?page=1&pageSize=25`;
+    
+  const { data, isLoading: isFetchingMenu } = useSWR(url, fetcher);
+  const menus = data?.data || [];
 
   const handleAddToCart = (type: string, id: string, name: string) => {
     const itemIsInCart = carts.find((item: ICart) => item.menuId === id);
@@ -113,7 +106,7 @@ const CreateOrder = () => {
         </div>
         <div className={styles.list}>
           {isFetchingMenu ? (
-            <LoadingSpinner centered />
+            <Skeleton type="menuCard" count={6} />
           ) : (
             menus.map((item: IMenu) => (
               <div className={styles.item} key={item.id}>
@@ -121,6 +114,7 @@ const CreateOrder = () => {
                   src={item.image_url}
                   alt={item.name}
                   className={styles.image}
+                  loading="lazy"
                 />
                 <h2>{item.name}</h2>
                 <div className={styles.bottom}>

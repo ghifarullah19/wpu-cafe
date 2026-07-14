@@ -1,21 +1,30 @@
+import { lazy, Suspense } from "react";
 import type { RouteObject } from "react-router-dom";
-import Home from "../components/pages/Home";
-import Login from "../components/pages/Login";
 import ProtectedRoute from "./ProtectedRoute";
-import ListOrder from "../components/pages/ListOrder";
-import DetailOrder from "../components/pages/DetailOrder";
-import CreateOrder from "../components/pages/CreateOrder";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
+
+const Home = lazy(() => import("../components/pages/Home"));
+const Login = lazy(() => import("../components/pages/Login"));
+const ListOrder = lazy(() => import("../components/pages/ListOrder"));
+const DetailOrder = lazy(() => import("../components/pages/DetailOrder"));
+const CreateOrder = lazy(() => import("../components/pages/CreateOrder"));
 
 const routes: RouteObject[] = [
   {
     path: "/",
-    element: <Home />,
+    element: (
+      <Suspense fallback={<LoadingSpinner centered />}>
+        <Home />
+      </Suspense>
+    ),
   },
   {
     path: "/login",
     element: (
       <ProtectedRoute>
-        <Login />
+        <Suspense fallback={<LoadingSpinner centered />}>
+          <Login />
+        </Suspense>
       </ProtectedRoute>
     ),
   },
@@ -23,7 +32,9 @@ const routes: RouteObject[] = [
     path: "/orders",
     element: (
       <ProtectedRoute>
-        <ListOrder />
+        <Suspense fallback={<LoadingSpinner centered />}>
+          <ListOrder />
+        </Suspense>
       </ProtectedRoute>
     ),
   },
@@ -31,7 +42,9 @@ const routes: RouteObject[] = [
     path: "/orders/:id",
     element: (
       <ProtectedRoute>
-        <DetailOrder />
+        <Suspense fallback={<LoadingSpinner centered />}>
+          <DetailOrder />
+        </Suspense>
       </ProtectedRoute>
     ),
   },
@@ -39,7 +52,9 @@ const routes: RouteObject[] = [
     path: "/create",
     element: (
       <ProtectedRoute>
-        <CreateOrder />
+        <Suspense fallback={<LoadingSpinner centered />}>
+          <CreateOrder />
+        </Suspense>
       </ProtectedRoute>
     ),
   },
