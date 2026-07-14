@@ -5,6 +5,7 @@ import styles from "./ListOrder.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../../ui/Button";
 import Input from "../../ui/Input";
+import Select from "../../ui/Select";
 import Skeleton from "../../ui/Skeleton";
 import type { IOrder } from "../../../types/order";
 import { removeLocalStorage } from "../../../utils/storage";
@@ -14,9 +15,30 @@ import { environment } from "../../../constants/environment";
 const ListOrder = () => {
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [page, setPage] = useState(1);
+  const [sortOption, setSortOption] = useState("newest");
 
-  const { data, isLoading, mutate } = useSWR(`${environment.API_URL}/orders?page=1&pageSize=10`, fetcher);
+  let sortBy = "created_at";
+  let sortOrder = "desc";
+  if (sortOption === "total-desc") {
+    sortBy = "total";
+    sortOrder = "desc";
+  } else if (sortOption === "total-asc") {
+    sortBy = "total";
+    sortOrder = "asc";
+  }
+
+  const { data, isLoading, mutate } = useSWR(
+    `${environment.API_URL}/orders?page=${page}&pageSize=10&sortBy=${sortBy}&sortOrder=${sortOrder}`,
+    fetcher
+  );
   const orders = data?.data || [];
+  const totalPages = data?.metadata?.totalPages || 1;
+
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSortOption(e.target.value);
+    setPage(1);
+  };
 
   const normalizedQuery = searchQuery.trim().toLowerCase();
   const filteredOrders = orders.filter((order: IOrder) => {
@@ -71,15 +93,31 @@ const ListOrder = () => {
             </Button>
           </div>
         </section>
-        <div className={styles.search}>
-          <Input
-            id="search"
-            label="Search orders"
-            name="search"
-            placeholder="Search by ID, customer, table, or status..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+        <div className={styles.controls}>
+          <div className={styles.search}>
+            <Input
+              id="search"
+              label="Search orders"
+              name="search"
+              placeholder="Search by ID, customer, table, or status..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+          <div className={styles.sort}>
+            <Select
+              id="sort"
+              name="sort"
+              label="Sort by"
+              options={[
+                { value: "newest", label: "Newest" },
+                { value: "total-desc", label: "Total: High to Low" },
+                { value: "total-asc", label: "Total: Low to High" },
+              ]}
+              value={sortOption}
+              onChange={handleSortChange}
+            />
+          </div>
         </div>
         <section className={styles.list}>
           {isLoading ? (
@@ -123,6 +161,23 @@ const ListOrder = () => {
           </>
         )}
         </section>
+        <div className={styles.pagination}>
+          <Button 
+            color="secondary" 
+            onClick={() => setPage((p) => Math.max(1, p - 1))} 
+            disabled={page === 1}
+          >
+            Previous
+          </Button>
+          <span>Page {page} of {totalPages}</span>
+          <Button 
+            color="secondary" 
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))} 
+            disabled={page >= totalPages}
+          >
+            Next
+          </Button>
+        </div>
       </div>
     </main>
   );
