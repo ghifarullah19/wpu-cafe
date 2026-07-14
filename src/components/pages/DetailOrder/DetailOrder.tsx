@@ -13,7 +13,7 @@ const DetailOrder = () => {
   const { id } = useParams();
   const [isUpdating, setIsUpdating] = useState(false);
 
-  const { data: order, error, isLoading, mutate } = useSWR(id ? `${environment.API_URL}/orders/${id}` : null, fetcher);
+  const { data: order, error, isLoading, mutate } = useSWR<IOrder>(id ? `${environment.API_URL}/orders/${id}` : null, fetcher);
 
   const handleCompletedOrder = async () => {
     if (!id) return;
