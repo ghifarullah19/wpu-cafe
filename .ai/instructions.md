@@ -27,7 +27,8 @@ For every feature:
 2. Review requirements.md
 3. Review design.md
 4. Follow tasks.md
-5. Implement only approved tasks
+5. Suggest tasks plan
+6. Implement only approved tasks plan
 
 ## Modification Rules
 

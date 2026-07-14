@@ -4,6 +4,7 @@ import { updateOrder } from "../../../services/orders.service";
 import styles from "./ListOrder.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../../ui/Button";
+import Input from "../../ui/Input";
 import Skeleton from "../../ui/Skeleton";
 import type { IOrder } from "../../../types/order";
 import { removeLocalStorage } from "../../../utils/storage";
@@ -12,9 +13,24 @@ import { environment } from "../../../constants/environment";
 
 const ListOrder = () => {
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const { data, isLoading, mutate } = useSWR(`${environment.API_URL}/orders?page=1&pageSize=10`, fetcher);
   const orders = data?.data || [];
+
+  const normalizedQuery = searchQuery.trim().toLowerCase();
+  const filteredOrders = orders.filter((order: IOrder) => {
+    if (!normalizedQuery) return true;
+
+    const isNumeric = /^\d+$/.test(normalizedQuery);
+    
+    const idMatches = !isNumeric && order.id.toLowerCase().includes(normalizedQuery);
+    const customerMatches = order.customer_name.toLowerCase().includes(normalizedQuery);
+    const tableMatches = String(order.table_number).toLowerCase().includes(normalizedQuery);
+    const statusMatches = order.status.toLowerCase().includes(normalizedQuery);
+
+    return idMatches || customerMatches || tableMatches || statusMatches;
+  });
 
   const handleCompletedOrder = async (id: string) => {
     try {
@@ -55,12 +71,22 @@ const ListOrder = () => {
             </Button>
           </div>
         </section>
+        <div className={styles.search}>
+          <Input
+            id="search"
+            label="Search orders"
+            name="search"
+            placeholder="Search by ID, customer, table, or status..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
         <section className={styles.list}>
           {isLoading ? (
             <Skeleton type="orderCard" count={3} />
           ) : (
             <>
-              {orders.map((order: IOrder) => (
+              {filteredOrders.map((order: IOrder) => (
             <div key={order.id} className={styles.card}>
               <div className={styles.cardHeader}>
                 <h2>{order.customer_name}</h2>
@@ -90,6 +116,9 @@ const ListOrder = () => {
           ))}
           {orders.length === 0 && (
             <p className={styles.empty}>No orders found.</p>
+          )}
+          {orders.length > 0 && filteredOrders.length === 0 && (
+            <p className={styles.empty}>No matching orders found.</p>
           )}
           </>
         )}

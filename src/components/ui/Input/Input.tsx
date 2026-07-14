@@ -1,3 +1,4 @@
+import type { ChangeEventHandler } from "react";
 import styles from "./Input.module.css";
 
 interface PropTypes {
@@ -8,6 +9,8 @@ interface PropTypes {
   placeholder?: string;
   required?: boolean;
   className?: string;
+  value?: string;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
 const Input = (props: PropTypes) => {
@@ -19,6 +22,8 @@ const Input = (props: PropTypes) => {
     placeholder,
     required = false,
     className,
+    value,
+    onChange,
   } = props;
 
   return (
@@ -27,10 +32,12 @@ const Input = (props: PropTypes) => {
       <input
         type={type}
         id={id}
-        className={`${styles.input} ${className}`}
+        className={`${styles.input} ${className || ""}`}
         name={name}
         placeholder={placeholder}
         required={required}
+        value={value}
+        onChange={onChange}
       />
     </label>
   );
