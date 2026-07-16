@@ -85,6 +85,9 @@ const ListOrder = () => {
         <section className={styles.header}>
           <h1 className={styles.title}>List Order</h1>
           <div className={styles.button}>
+            <Link to="/reviews">
+              <Button color="secondary">Reviews</Button>
+            </Link>
             <Link to="/create">
               <Button>+ New Order</Button>
             </Link>

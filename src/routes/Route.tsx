@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { lazy, Suspense } from "react";
 import type { RouteObject } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
@@ -8,6 +9,7 @@ const Login = lazy(() => import("../components/pages/Login"));
 const ListOrder = lazy(() => import("../components/pages/ListOrder"));
 const DetailOrder = lazy(() => import("../components/pages/DetailOrder"));
 const CreateOrder = lazy(() => import("../components/pages/CreateOrder"));
+const Review = lazy(() => import("../components/pages/Review"));
 
 const routes: RouteObject[] = [
   {
@@ -54,6 +56,16 @@ const routes: RouteObject[] = [
       <ProtectedRoute>
         <Suspense fallback={<LoadingSpinner centered />}>
           <CreateOrder />
+        </Suspense>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/reviews",
+    element: (
+      <ProtectedRoute>
+        <Suspense fallback={<LoadingSpinner centered />}>
+          <Review />
         </Suspense>
       </ProtectedRoute>
     ),
