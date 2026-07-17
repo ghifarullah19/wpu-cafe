@@ -50,7 +50,7 @@ Alur utama aplikasi:
 
 #### Acceptance Criteria
 
-1. THE Login_Page SHALL menampilkan form login dengan field email, field password, dan tombol "Login"
+1. THE Login_Page SHALL menampilkan form login dengan field email (placeholder "admin@wpucafe.com"), field password (placeholder "Admin123"), dan tombol "Login" untuk mempermudah akses portofolio/demo
 2. WHEN pengguna menekan tombol "Login" dengan field email dan password tidak kosong, THE Login_Page SHALL mengirim request autentikasi ke API menggunakan kredensial yang dimasukkan
 3. WHEN request autentikasi berhasil, THE Login_Page SHALL menyimpan Auth_Token yang diterima dari respons API ke localStorage lalu mengarahkan pengguna ke halaman `/orders`
 4. IF request autentikasi gagal, THEN THE Login_Page SHALL menampilkan pesan error yang menginformasikan bahwa email atau password tidak valid, dan form tetap dapat diisi ulang tanpa me-refresh halaman

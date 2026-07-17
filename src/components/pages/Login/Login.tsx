@@ -52,7 +52,7 @@ const Login = () => {
             name="email"
             id="email"
             type="email"
-            placeholder="Enter your email"
+            placeholder="admin@wpucafe.com"
             required
           />
           <Input
@@ -60,7 +60,7 @@ const Login = () => {
             name="password"
             id="password"
             type="password"
-            placeholder="Enter your password"
+            placeholder="Admin123"
             required
           />
           <Button type="submit" isLoading={isLoading}>Sign In</Button>
