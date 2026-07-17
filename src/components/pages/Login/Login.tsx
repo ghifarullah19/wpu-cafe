@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleLogin = async (event: FormEvent) => {
     event.preventDefault();
@@ -20,12 +21,18 @@ const Login = () => {
 
     try {
       setIsLoading(true);
+      setError(null);
       const result = await login(payload);
-      setLocalStorage("auth", result.token);
-
-      return navigate("/orders");
+      
+      if (result && result.token) {
+        setLocalStorage("auth", result.token);
+        return navigate("/orders");
+      } else {
+        setError(result?.message || "Invalid email or password");
+      }
     } catch (error) {
       console.error("Login error:", error);
+      setError("An unexpected network error occurred. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -39,6 +46,7 @@ const Login = () => {
           <p className={styles.subtitle}>Welcome back! Please enter your details.</p>
         </div>
         <form action="" className={styles.form} onSubmit={handleLogin}>
+          {error && <div className={styles.error}>{error}</div>}
           <Input
             label="Email"
             name="email"
